@@ -1,0 +1,7 @@
+streamlit
+sentence-transformers
+rank-bm25
+scikit-learn
+numpy
+groq
+google-genai
