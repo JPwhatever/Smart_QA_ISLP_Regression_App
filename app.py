@@ -75,22 +75,25 @@ Question: {question}
 
 Answer:"""
 
-    if generator == "Gemini":
-        response = gemini_client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=prompt
-        )
-        answer = response.text
-    else:
-        response = groq_client.chat.completions.create(
-            model="llama-3.1-8b-instant",
-            messages=[{"role": "user", "content": prompt}],
-            max_tokens=200
-        )
-        answer = response.choices[0].message.content
+    try:
+        if generator == "Gemini":
+            response = gemini_client.models.generate_content(
+                model="gemini-2.5-flash",
+                contents=prompt
+            )
+            answer = response.text
+        else:
+            response = groq_client.chat.completions.create(
+                model="llama-3.1-8b-instant",
+                messages=[{"role": "user", "content": prompt}],
+                max_tokens=200
+            )
+            answer = response.choices[0].message.content
+    except Exception as e:
+        answer = f"Generator error — please try Llama 3.1 8B instead. (Error: {str(e)[:100]})"
 
     return answer, top_chunks
-
+    
 # ── UI ─────────────────────────────────────────────────────────────────────
 generator = st.radio("Choose generator:", ["Gemini", "Llama 3.1 8B (Groq)"], horizontal=True)
 
